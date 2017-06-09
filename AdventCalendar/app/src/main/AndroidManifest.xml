@@ -12,7 +12,8 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- The manifest entry for the MainActivity -->
-        <activity android:name="com.example.android.adventcalendar.MainActivity">
+        <activity android:name="com.example.android.adventcalendar.MainActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

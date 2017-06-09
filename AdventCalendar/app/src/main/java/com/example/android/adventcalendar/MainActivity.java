@@ -109,11 +109,11 @@ public class MainActivity extends AppCompatActivity implements
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Create a new intent to start an AddTaskActivity
                 Intent addTaskIntent = new Intent(MainActivity.this, AddTaskActivity.class);
                 startActivity(addTaskIntent);
             }
         });
+
 
         /*
          Ensure a loader is initialized and active. If the loader doesn't already exist, one is
@@ -172,7 +172,8 @@ public class MainActivity extends AppCompatActivity implements
                 // [Hint] use a try/catch block to catch any errors in loading data
 
                 try {
-                    return getContentResolver().query(TaskContract.TaskEntry.CONTENT_URI,
+                    return getContentResolver().query(
+                            TaskContract.TaskEntry.CONTENT_URI,
                             null,
                             null,
                             null,

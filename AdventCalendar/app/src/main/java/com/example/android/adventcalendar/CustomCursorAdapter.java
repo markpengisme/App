@@ -82,7 +82,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         // Indices for the _id, description, and priority columns
         int idIndex = mCursor.getColumnIndex(TaskContract.TaskEntry._ID);
         int descriptionIndex = mCursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_DESCRIPTION);
-        int priorityIndex = mCursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_PRIORITY);
         int yearIndex =mCursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_YEAR);
         int monthIndex =mCursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_MONTH);
         int dayIndex =mCursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_DAY);
@@ -93,7 +92,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         // Determine the values of the wanted data
         final int id = mCursor.getInt(idIndex);
         String description = mCursor.getString(descriptionIndex);
-        int priority = mCursor.getInt(priorityIndex);
         int year = mCursor.getInt(yearIndex);
         int month = mCursor.getInt(monthIndex);
         int day = mCursor.getInt(dayIndex);
@@ -103,14 +101,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         holder.itemView.setTag(id);
         holder.taskDescriptionView.setText(description);
 
-        // Programmatically set the text and color for the priority TextView
-        String priorityString = "" + priority; // converts int to String
-        holder.priorityView.setText(priorityString);
-
-        GradientDrawable priorityCircle = (GradientDrawable) holder.priorityView.getBackground();
-        // Get the appropriate background color based on the priority
-        int priorityColor = getPriorityColor(priority);
-        priorityCircle.setColor(priorityColor);
 
         //set dayView
         String rest_time=restTime(eventTimeInMills)+"天";
@@ -121,24 +111,7 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
     }
 
 
-    /*
-    Helper method for selecting the correct priority circle color.
-    P1 = red, P2 = orange, P3 = yellow
-    */
-    private int getPriorityColor(int priority) {
-        int priorityColor = 0;
 
-        switch(priority) {
-            case 1: priorityColor = ContextCompat.getColor(mContext, R.color.materialRed);
-                break;
-            case 2: priorityColor = ContextCompat.getColor(mContext, R.color.materialOrange);
-                break;
-            case 3: priorityColor = ContextCompat.getColor(mContext, R.color.materialYellow);
-                break;
-            default: break;
-        }
-        return priorityColor;
-    }
 
 
     /**
@@ -179,7 +152,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         // Class variables for the task description and priority TextViews
         TextView taskDescriptionView;
         TextView dayView;
-        TextView priorityView;
 
         /**
          * Constructor for the TaskViewHolders.
@@ -190,7 +162,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
             super(itemView);
 
             taskDescriptionView = (TextView) itemView.findViewById(R.id.taskDescription);
-            priorityView = (TextView) itemView.findViewById(R.id.priorityTextView);
             dayView =(TextView) itemView.findViewById(R.id.dayView);
         }
     }

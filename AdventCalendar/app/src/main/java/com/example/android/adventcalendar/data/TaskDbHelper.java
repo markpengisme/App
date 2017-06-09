@@ -31,7 +31,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "tasksDb.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
 
 
@@ -53,7 +53,6 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         final String CREATE_TABLE = "CREATE TABLE "   + TaskEntry.TABLE_NAME + " (" +
                         TaskEntry._ID                 + " INTEGER PRIMARY KEY, " +
                         TaskEntry.COLUMN_DESCRIPTION  + " TEXT NOT NULL, " +
-                        TaskEntry.COLUMN_PRIORITY     + " INTEGER NOT NULL,"+
                         TaskEntry.COLUMN_YEAR         + " INTEGER NOT NULL,"+
                         TaskEntry.COLUMN_MONTH        + " INTEGER NOT NULL,"+
                         TaskEntry.COLUMN_DAY          + " INTEGER NOT NULL,"+

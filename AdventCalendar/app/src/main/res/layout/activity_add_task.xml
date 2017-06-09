@@ -12,7 +12,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="2"
+    android:background="#fff5ee">
 
     <!-- EditText for getting task description input -->
     <EditText
@@ -30,113 +32,63 @@
         android:layout_gravity="start"
         android:textColor="@android:color/primary_text_light"
         style="@style/TextAppearance.AppCompat.Medium"
-        android:text="@string/date_string"
+        android:text="請輸入日期"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="0.65"
+        android:weightSum="1">
 
         <DatePicker
             android:id="@+id/DatePicker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:datePickerMode="spinner"
+            android:layout_height="match_parent"
             android:calendarViewShown="false"
-            ></DatePicker>
-
-        <!-- Linear layout that contains all three priority buttons (high, medium, low)
-        in a single line -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:weightSum="3">
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:textColor="@android:color/primary_text_light"
-                android:id="@+id/buttonP1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/materialRed"
-                android:text="@string/high_priority"
-                android:layout_weight="1"
-                android:onClick="onPrioritySelected"/>
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:textColor="@android:color/primary_text_light"
-                android:id="@+id/buttonP2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/materialOrange"
-                android:text="@string/med_priority"
-                android:layout_weight="1"
-                android:onClick="onPrioritySelected"/>
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:textColor="@android:color/primary_text_light"
-                android:id="@+id/buttonP3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/materialYellow"
-                android:text="@string/low_priority"
-                android:layout_weight="1"
-                android:onClick="onPrioritySelected"/>
-
-        </LinearLayout>
-
-        <!-- RadioGroup for visible selection of a priority -->
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:weightSum="3">
-
-            <RadioButton
-                android:id="@+id/radButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPrioritySelected"
-                android:layout_weight="1"
-                android:theme="@style/WhiteRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPrioritySelected"
-                android:layout_weight="1"
-                android:theme="@style/WhiteRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPrioritySelected"
-                android:layout_weight="1"
-                android:theme="@style/WhiteRadioButton"/>
-
-        </RadioGroup>
+            android:datePickerMode="spinner"
+            android:layout_weight="1.96"></DatePicker>
 
     </LinearLayout>
 
     <!-- Add button -->
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/add_button"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/primary_text_dark"
-        android:background="@color/colorPrimary"
-        android:onClick="onClickAddTask"/>
+    <LinearLayout
+        android:layout_width="365dp"
+
+        android:layout_height="88dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/addButton"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-20dp"
+            android:background="@drawable/shape"
+            android:onClick="onClickAddTask"
+            android:text="@string/add_button"
+            android:textColor="@color/white"
+
+            />
+
+        <Button
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-20dp"
+            android:background="@drawable/mybutton"
+            android:elevation="0dp"
+            android:onClick="backbutton"
+            android:text="Back"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 </LinearLayout>
