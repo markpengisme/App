@@ -18,11 +18,13 @@ package com.example.android.adventcalendar;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,21 +32,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.example.android.adventcalendar.data.TaskContract;
 
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>,CustomCursorAdapter.ListItemClickListener{
 
 
     // Constants for logging and referring to a unique loader
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int TASK_LOADER_ID = 0;
+    private Toast mToast;
 
     // Member variables for the adapter and RecyclerView
     private CustomCursorAdapter mAdapter;
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
 
     @Override
@@ -61,27 +67,50 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize the adapter and attach it to the RecyclerView
-        mAdapter = new CustomCursorAdapter(this);
+        mAdapter = new CustomCursorAdapter(this,this);
         mRecyclerView.setAdapter(mAdapter);
 
-        /*
-         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
-         An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
-         and uses callbacks to signal when a user is performing these actions.
+        /**
+         *  Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
+         *  An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
+         *  and uses callbacks to signal when a user is performing these actions.
          */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return super.isItemViewSwipeEnabled();
+            }
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
             }
+
+
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                super.onSelectedChanged(viewHolder, actionState);
+                switch (actionState) {
+                    case ItemTouchHelper.ACTION_STATE_SWIPE:
+                        Log.e("ACTION_STATE_SWIPE", "ACTION_STATE_SWIPE");
+                        viewHolder.itemView.findViewById(R.id.card).setBackgroundResource(R.drawable.itemshapemove);
+                        break;
+                }
+            }
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                viewHolder.itemView.findViewById(R.id.card).setBackgroundResource(R.drawable.itemshape);
+            }
+
+
 
             // Called when a user swipes left or right on a ViewHolder
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Here is where you'll implement swipe to delete
 
-                // COMPLETED (1) Construct the URI for the item to delete
-                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
+                //  Construct the URI for the item to delete
                 // Retrieve the id of the task to delete
                 int id = (int) viewHolder.itemView.getTag();
 
@@ -90,10 +119,10 @@ public class MainActivity extends AppCompatActivity implements
                 Uri uri = TaskContract.TaskEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
-                // COMPLETED (2) Delete a single row of data using a ContentResolver
+                // Delete a single row of data using a ContentResolver
                 getContentResolver().delete(uri, null, null);
 
-                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
+                // Restart the loader to re-query for all tasks after a deletion
                 getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, MainActivity.this);
 
             }
@@ -103,13 +132,22 @@ public class MainActivity extends AppCompatActivity implements
          Set the Floating Action Button (FAB) to its corresponding View.
          Attach an OnClickListener to it, so that when it's clicked, a new intent will be created
          to launch the AddTaskActivity.
+         浮動button新增事件
          */
         FloatingActionButton fabButton = (FloatingActionButton) findViewById(R.id.fab);
 
-        fabButton.setOnClickListener(new View.OnClickListener() {
+        fabButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view){
                 Intent addTaskIntent = new Intent(MainActivity.this, AddTaskActivity.class);
+                //Toast
+                if (mToast != null) {
+                    mToast.cancel();
+                }
+                mToast= Toast.makeText(MainActivity.this,"新增事件",Toast.LENGTH_SHORT);
+                mToast.show();
+
                 startActivity(addTaskIntent);
             }
         });
@@ -143,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements
      *
      * Implements the required callbacks to take care of loading data at all stages of loading.
      */
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle loaderArgs) {
 
@@ -221,5 +260,34 @@ public class MainActivity extends AppCompatActivity implements
             mAdapter.swapCursor(null);
         }
 
+    /**
+     *  RecyclerView點擊更新事件
+     *      用Intent和Bunddle帶去UpdateTaskActivity
+     */
+    @Override
+    public void onListItemClick(View v,int clickedItemIndex)  {
+        //取得更新事件ID
+        int dataId=(int)v.getTag();
+
+        //取得更新事件名稱(String)
+        String dataDescription =((TextView)v.findViewById(R.id.taskDescription)).getText().toString();
+
+        //Toast
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast= Toast.makeText(this,"更新 "+dataDescription+"事件", Toast.LENGTH_SHORT);
+        mToast.show();
+
+        //Intent
+        Intent updateTaskIntent = new Intent(MainActivity.this, UpdateTaskActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", String.valueOf(dataId));
+        bundle.putString("description", String.valueOf(dataDescription));
+
+        //將Bundle物件assign給intent
+        updateTaskIntent.putExtras(bundle);
+        startActivity(updateTaskIntent);
+    }
 }
 

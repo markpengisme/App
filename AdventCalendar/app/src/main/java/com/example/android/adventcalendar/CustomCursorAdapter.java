@@ -18,17 +18,13 @@ package com.example.android.adventcalendar;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
-//import android.icu.util.Calendar;
 import java.util.Calendar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.util.Log;
-
 
 import com.example.android.adventcalendar.data.TaskContract;
 
@@ -42,16 +38,23 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
     // Class variables for the Cursor that holds task data and the Context
     private Cursor mCursor;
     private Context mContext;
+    public ListItemClickListener mOnClickListener;
 
+
+    public interface ListItemClickListener {
+        void onListItemClick(View v,int clickedItemIndex);
+    }
 
     /**
      * Constructor for the CustomCursorAdapter that initializes the Context.
      *
      * @param mContext the current Context
      */
-    public CustomCursorAdapter(Context mContext) {
+    public CustomCursorAdapter(Context mContext,ListItemClickListener listener) {
         this.mContext = mContext;
+        mOnClickListener = listener;
     }
+
 
 
     /**
@@ -101,10 +104,8 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         holder.itemView.setTag(id);
         holder.taskDescriptionView.setText(description);
 
-
         //set dayView
         String rest_time=restTime(eventTimeInMills)+"天";
-        //String now="now"+nowTime();
         String deadline =String.valueOf(year)+"/"+String.valueOf(month)+"/"+String.valueOf(day);
         holder.dayView.setText(deadline+"\t\t"+rest_time);
 
@@ -147,7 +148,7 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
 
 
     // Inner class for creating ViewHolders
-    class TaskViewHolder extends RecyclerView.ViewHolder {
+    public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // Class variables for the task description and priority TextViews
         TextView taskDescriptionView;
@@ -158,13 +159,26 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
          *
          * @param itemView The view inflated in onCreateViewHolder
          */
-        public TaskViewHolder(View itemView) {
+        private TaskViewHolder(View itemView) {
             super(itemView);
 
             taskDescriptionView = (TextView) itemView.findViewById(R.id.taskDescription);
             dayView =(TextView) itemView.findViewById(R.id.dayView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            mOnClickListener.onListItemClick(v,clickedPosition);
         }
     }
+
+    /**
+     *  把（事件時間-現在時間）轉為天數，再判斷 還有OR已過
+     *
+     * @return Day in String
+     */
     private String restTime(long eventTimeInMills)
     {
         String restDay;
@@ -180,13 +194,5 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
         }
         Log.v("index",String.valueOf(rest));
         return restDay;
-    }
-    private String nowTime()
-    {
-        Calendar c=Calendar.getInstance();
-        int nowYear=c.get(Calendar.YEAR);
-        int nowMonth=c.get(Calendar.MONTH)+1;
-        int nowDay=c.get(Calendar.DAY_OF_MONTH);
-        return String.valueOf(nowYear)+"/"+String.valueOf(nowMonth)+"/"+String.valueOf(nowDay);
     }
 }

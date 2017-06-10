@@ -25,7 +25,10 @@
         <activity
             android:name="com.example.android.adventcalendar.AddTaskActivity"
             android:label="@string/add_task_activity_name" />
-
+        <!-- UpdateTaskActivity -->
+        <activity
+            android:name="com.example.android.adventcalendar.UpdateTaskActivity"
+            android:label="@string/add_task_activity_name" />
         <!-- Register the TaskContentProvider -->
         <!-- Set name, authorities, and exported attributes -->
         <!-- exported = false limits access to this ContentProvider to only this app -->

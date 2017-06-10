@@ -101,6 +101,7 @@ public class TaskContentProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
+
             // Set the value for the returnedUri and write the default case for unknown URI's
             // Default case throws an UnsupportedOperationException
             default:
@@ -139,6 +140,14 @@ public class TaskContentProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            case TASK_WITH_ID:
+                retCursor =   db.query(TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
             // Default exception
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -192,9 +201,31 @@ public class TaskContentProvider extends ContentProvider {
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
 
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+        //Keep track of if an update occurs
+        int tasksUpdated;
 
+        // match code
+        int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case TASK_WITH_ID:
+                //update a single task by getting the id
+                String id = uri.getPathSegments().get(1);
+                //using selections
+                tasksUpdated = mTaskDbHelper.getWritableDatabase().update(TABLE_NAME, values, "_id=?", new String[]{id});
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (tasksUpdated != 0) {
+            //set notifications if a task was updated
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // return number of tasks updated
+        return tasksUpdated;
+    }
 
     @Override
     public String getType(@NonNull Uri uri) {

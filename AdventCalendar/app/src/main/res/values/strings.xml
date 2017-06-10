@@ -9,5 +9,7 @@
     <string name="date_string">Date</string>
 
     <string name="add_button">Add</string>
+    <string name="back_button">Back</string>
+    <string name="text_view_description">選擇日期</string>
 
 </resources>

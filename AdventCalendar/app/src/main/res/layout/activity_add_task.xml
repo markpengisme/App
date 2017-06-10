@@ -23,16 +23,17 @@
         android:layout_height="wrap_content"
         android:gravity="start"
         android:hint="@string/edit_task_description"
+        android:textSize="30sp"
         android:paddingBottom ="@dimen/activity_horizontal_margin"/>
 
-     TextView and FrameLayout (which contains buttons) for Priority Selection
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:textColor="@android:color/primary_text_light"
         style="@style/TextAppearance.AppCompat.Medium"
-        android:text="請輸入日期"
+        android:text="@string/text_view_description"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
     <LinearLayout
@@ -40,36 +41,38 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        android:layout_weight="0.65"
         android:weightSum="1">
 
-        <DatePicker
-            android:id="@+id/DatePicker"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            android:layout_weight="1.96"></DatePicker>
+    <DatePicker
+        android:id="@+id/DatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_weight="1"
+        android:scaleX="1.5"
+        android:scaleY="1.5">
+    </DatePicker>
 
     </LinearLayout>
 
     <!-- Add button -->
     <LinearLayout
         android:layout_width="365dp"
-
-        android:layout_height="88dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:weightSum="1">
 
         <Button
             android:id="@+id/addButton"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_weight="0.5"
+            android:layout_margin="20dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="-20dp"
-            android:background="@drawable/shape"
+            android:gravity="center"
+            android:background="@drawable/buttonshape"
             android:onClick="onClickAddTask"
             android:text="@string/add_button"
             android:textColor="@color/white"
@@ -78,15 +81,16 @@
 
         <Button
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_weight="0.5"
+            android:layout_margin="20dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="-20dp"
-            android:background="@drawable/mybutton"
+            android:gravity="center"
+            android:background="@drawable/buttonshape"
             android:elevation="0dp"
-            android:onClick="backbutton"
-            android:text="Back"
+            android:onClick="backButton"
+            android:text="@string/back_button"
             android:textColor="@color/white" />
 
     </LinearLayout>

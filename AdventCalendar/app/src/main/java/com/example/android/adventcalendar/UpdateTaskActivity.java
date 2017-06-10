@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import java.util.Calendar;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,20 +31,36 @@ import android.widget.Toast;
 import com.example.android.adventcalendar.data.TaskContract;
 
 
-public class AddTaskActivity extends AppCompatActivity {
-
-    // Declare a member variable to keep track of a task's selected mPriority
+public class UpdateTaskActivity extends AppCompatActivity {
 
 
+    //dataId,dataDescription
+    public String dataId;
+    public String dataDescription;
+
+
+    /**
+     * setView
+     * 取得bundle的dataId,dataDescription
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        Bundle bundle =this.getIntent().getExtras();
+        Button mButton=(Button)findViewById(R.id.addButton);
+        mButton.setText("UPGRADE");
+        dataId = bundle.getString("id");
+        dataDescription = bundle.getString("description");
+        EditText mEditText=(EditText) findViewById(R.id.editTextTaskDescription);
+        mEditText.setText(dataDescription);
     }
+
+
     /**
-     * backbutton 返回鈕
+     *  返回鈕
      */
     public void backButton(View view){
-        Intent addTaskIntent = new Intent(AddTaskActivity.this, MainActivity.class);
+        Intent addTaskIntent = new Intent(UpdateTaskActivity.this, MainActivity.class);
         startActivity(addTaskIntent);
     }
 
@@ -54,36 +71,33 @@ public class AddTaskActivity extends AppCompatActivity {
     public void onClickAddTask(View view) {
 
         //日期選擇器
-        DatePicker datePicker =(DatePicker)findViewById(R.id.DatePicker) ;
-        int year=datePicker.getYear();
-        int month=datePicker.getMonth()+1;//Month is 0~11 so plus one
-        int day=datePicker.getDayOfMonth();
+        DatePicker datePicker = (DatePicker) findViewById(R.id.DatePicker);
+        int year = datePicker.getYear();
+        int month = datePicker.getMonth() + 1;//Month is 0~11 so plus one
+        int day = datePicker.getDayOfMonth();
 
-        //Description
+        //留著原本的Description
         String input = ((EditText) findViewById(R.id.editTextTaskDescription)).getText().toString();
 
         //日曆取現在時間
         Calendar calendar = Calendar.getInstance();
-        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),0,0,0);
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), 0, 0, 0);
 
         //轉成秒給timeInMills
         long timeInMills = calendar.getTimeInMillis();
 
         //Description不可為空
         if (input.length() == 0) {
-            Toast.makeText(getBaseContext(),"請輸入內容",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "請輸入內容", Toast.LENGTH_SHORT).show();
             return;
         }
 
-
-
         /*
-            把資料用ContentResolver insert進去
+         把資料用ContentResolver update進去
          */
-
+        // Insert new task data via a ContentResolver
         // Create new empty ContentValues object
         ContentValues contentValues = new ContentValues();
-
         // Put the task description and selected mPriority into the ContentValues
         contentValues.put(TaskContract.TaskEntry.COLUMN_DESCRIPTION, input);
         contentValues.put(TaskContract.TaskEntry.COLUMN_YEAR, year);
@@ -92,18 +106,26 @@ public class AddTaskActivity extends AppCompatActivity {
         contentValues.put(TaskContract.TaskEntry.COLUMN_TIME_IN_MILLS, timeInMills);
 
         // Insert the content values via a ContentResolver
-        Uri uri = getContentResolver().insert(TaskContract.TaskEntry.CONTENT_URI, contentValues);
+        Uri uri = TaskContract.TaskEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(dataId).build();
+        int success = getContentResolver().update(uri, contentValues, null, null);
 
         // Display the URI that's returned with a Toast
-        if(uri != null) {
-            Toast.makeText(getBaseContext(), "更新成功", Toast.LENGTH_SHORT).show();
+        if (success == 0) {
+            Toast.makeText(getBaseContext(), "更新失敗", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getBaseContext(), "更新失敗uri:"+String.valueOf(uri), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "更新成功", Toast.LENGTH_SHORT).show();
+
+            // Finish activity (this returns back to MainActivity)
+            finish();
+
         }
 
-        // Finish activity (this returns back to MainActivity)
-        finish();
+
+        /*
+         * onPrioritySelected is called whenever a priority button is clicked.
+         * It changes the value of mPriority based on the selected button.
+         */
 
     }
-
 }
