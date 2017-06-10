@@ -48,7 +48,7 @@ public class UpdateTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         Bundle bundle =this.getIntent().getExtras();
         Button mButton=(Button)findViewById(R.id.addButton);
-        mButton.setText("UPGRADE");
+        mButton.setText("UPDATE");
         dataId = bundle.getString("id");
         dataDescription = bundle.getString("description");
         EditText mEditText=(EditText) findViewById(R.id.editTextTaskDescription);
