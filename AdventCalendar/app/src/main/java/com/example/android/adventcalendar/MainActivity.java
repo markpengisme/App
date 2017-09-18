@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
 
-            // loadInBackground() performs asynchronous loading of data
+            // loadInBackground() performs asynchronous loading of data``
             @Override
             public Cursor loadInBackground() {
                 // Will implement to load data

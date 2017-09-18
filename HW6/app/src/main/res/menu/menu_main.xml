@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.ntust.prlab.sessionmanager.MainActivity">
+
+    <item
+        android:id="@+id/action_sort_by_id"
+        android:orderInCategory="100"
+        android:title="@string/action_sort_by_id"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_by_name"
+        android:orderInCategory="100"
+        android:title="@string/action_sort_by_name"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_by_gender"
+        android:orderInCategory="100"
+        android:title="@string/action_sort_by_gender"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_by_age"
+        android:orderInCategory="100"
+        android:title="@string/action_sort_by_age"
+        app:showAsAction="never" />
+
+</menu>

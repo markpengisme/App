@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/sortID"
+            android:orderInCategory="1"
+            android:title="Sort by ID" />
+        <item
+            android:id="@+id/sortName"
+            android:orderInCategory="2"
+            android:title="Sort by Name" />
+        <item
+            android:id="@+id/sortAge"
+            android:orderInCategory="3"
+            android:title="Sort by Age" />
+        <item
+            android:id="@+id/sortGender"
+            android:orderInCategory="4"
+            android:title="Sort by Gender" />
+    </menu>
